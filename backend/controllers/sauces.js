@@ -55,7 +55,7 @@ exports.likeDislikeSauce = (req, res, next) => {
       { _id: sauceId },
       {
         $push: { usersLiked: user },
-        $inc: { likes: like },
+        $inc: { likes: +1 },
       }
     )
       .then(() => res.status(200).json({ message: "Like ajouté !" }))
@@ -66,7 +66,7 @@ exports.likeDislikeSauce = (req, res, next) => {
       { _id: sauceId },
       {
         $push: { usersDisliked: user },
-        $inc: { dislikes: -like },
+        $inc: { dislikes: +1 },
       }
     )
       .then(() => {
