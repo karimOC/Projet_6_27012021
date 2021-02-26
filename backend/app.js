@@ -7,11 +7,16 @@ const userRoutes = require("./routes/user");
 const path = require("path");
 const helmet = require("helmet");
 require("dotenv").config();
-// console.log(process.env.DB_USER)
+const mongoSanitize = require("express-mongo-sanitize");
+const rateLimit = require("express-rate-limit");
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5,
+});
 
 mongoose
   .connect(
-    'mongodb+srv://karim:azerty@cluster0.8cgev.mongodb.net/sopekocko?retryWrites=true&w=majority',
+    `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.8cgev.mongodb.net/${process.env.DB_DATABASE}?retryWrites=true&w=majority`,
     { useNewUrlParser: true, useUnifiedTopology: true }
   )
   .then(() => console.log("Connexion à MongoDB réussie !"))
@@ -32,10 +37,11 @@ app.use((req, res, next) => {
 
 app.use(bodyParser.json());
 app.use(helmet());
+app.use(mongoSanitize());
 
 app.use("/images", express.static(path.join(__dirname, "images")));
 
-app.use("/api/sauces", saucesRoutes);
-app.use("/api/auth", userRoutes);
+app.use("/api/sauces", apiLimiter, saucesRoutes);
+app.use("/api/auth", apiLimiter, userRoutes);
 
 module.exports = app;

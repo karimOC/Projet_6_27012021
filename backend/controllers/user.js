@@ -6,6 +6,7 @@ const validator = require("validator");
 exports.signup = (req, res, next) => {
   if (validator.isStrongPassword(req.body.password) == false) {
     console.log("Mot de passe trop simple");
+    document.location.reload(); // Rafraichie la page
   } else {
     bcrypt
       .hash(req.body.password, 10)
@@ -21,7 +22,6 @@ exports.signup = (req, res, next) => {
       })
       .catch((error) => res.status(500).json({ error }));
   }
-  console.log(validator.isStrongPassword(req.body.password));
 };
 
 exports.login = (req, res, next) => {
