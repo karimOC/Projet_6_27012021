@@ -8,11 +8,7 @@ const path = require("path");
 const helmet = require("helmet");
 require("dotenv").config();
 const mongoSanitize = require("express-mongo-sanitize");
-const rateLimit = require("express-rate-limit");
-const apiLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 5,
-});
+const apiLimiter = require("./middleware/api-limiter");
 
 mongoose
   .connect(
@@ -35,9 +31,9 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(bodyParser.json());
-app.use(helmet());
-app.use(mongoSanitize());
+app.use(bodyParser.json()); // Transforme le corps de la requête en objet JS
+app.use(helmet()); // Protège contre les fails XSS (bloc ce qui peut être du code)
+app.use(mongoSanitize()); // Cherche dans les req et supprime toutes les clés commençant par $ ou contenant "."
 
 app.use("/images", express.static(path.join(__dirname, "images")));
 
