@@ -54,7 +54,7 @@ exports.likeDislikeSauce = (req, res, next) => {
     Sauce.updateOne(
       { _id: sauceId },
       {
-        $push: { usersLiked: user },
+        $push: { usersLiked: user }, // On l'ajoute a usersLiked dans la table sauce
         $inc: { likes: +1 },
       }
     )
@@ -65,7 +65,7 @@ exports.likeDislikeSauce = (req, res, next) => {
     Sauce.updateOne(
       { _id: sauceId },
       {
-        $push: { usersDisliked: user },
+        $push: { usersDisliked: user }, // On l'ajoute a usersDisliked dans la table sauce
         $inc: { dislikes: +1 },
       }
     )
@@ -81,7 +81,7 @@ exports.likeDislikeSauce = (req, res, next) => {
           Sauce.updateOne(
             { _id: sauceId },
             {
-              $pull: { usersLiked: user },
+              $pull: { usersLiked: user }, // On le retire de usersLiked dans la table sauce
               $inc: { likes: -1 },
             }
           )
@@ -92,7 +92,7 @@ exports.likeDislikeSauce = (req, res, next) => {
           Sauce.updateOne(
             { _id: sauceId },
             {
-              $pull: { usersDisliked: user },
+              $pull: { usersDisliked: user }, // On le retire de usersDisliked dans la table sauce
               $inc: { dislikes: -1 },
             }
           )
@@ -108,7 +108,7 @@ exports.deleteSauce = (req, res, next) => {
   Sauce.findOne({ _id: req.params.id })
     .then((sauce) => {
       const filename = sauce.imageUrl.split("/images/")[1];
-      fs.unlink(`images/${filename}`, () => {
+      fs.unlink(`images/${filename}`, () => { // La méthode fs.unlink () est utilisée pour supprimer un fichier
         Sauce.deleteOne({ _id: req.params.id })
           .then(() => res.status(200).json({ message: "Objet supprimé !" }))
           .catch((error) => res.status(400).json({ error }));
