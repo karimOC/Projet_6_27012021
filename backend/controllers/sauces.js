@@ -54,7 +54,7 @@ exports.likeDislikeSauce = (req, res, next) => {
     Sauce.updateOne(
       { _id: sauceId },
       {
-        $push: { usersLiked: user }, // On l'ajoute a usersLiked dans la table sauce
+        $push: { usersLiked: user }, // On ajoute le User a usersLiked dans la table sauce
         $inc: { likes: +1 },
       }
     )
