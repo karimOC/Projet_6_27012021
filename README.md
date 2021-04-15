@@ -7,7 +7,7 @@ INSTALLATION
 Repo à cloner => https://github.com/karimOC/ElfakihKarim_6_27012021.git
 
 - Invite de cmd ou terminal => 
-Dans le dossier backend entrez "node server", 
+Dans le dossier backend entrez "npm install" ensuite "node server", 
 Dans le dossier frontend entrez "ng serve" 
 - Message que vous devriez appercevoir : 
 Listening on port 3000
